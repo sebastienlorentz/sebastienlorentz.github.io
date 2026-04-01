@@ -4,7 +4,7 @@ title: "Voronoi Diagrams"
 description: "Per-pixel Voronoi colouring with edge detection, built in p5.js."
 date: 2026-04-01
 language: JavaScript (p5.js)
-github: https://github.com/yourusername/voronoi-p5
+github: https://github.com/gaba5/voronoi-p5
 tags: [geometry, p5.js, visualisation]
 uses_p5: true
 ---
