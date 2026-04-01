@@ -1,0 +1,44 @@
+title: "Sebastien"
+description: "Notes on mathematics, simulation, and code."
+author: Sebastien
+email: ""
+
+baseurl: ""
+url: "https://yourusername.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: null   # No gem theme — we use our own layout
+
+kramdown:
+  math_engine: null  # MathJax is loaded manually in the layout
+  input: GFM
+  syntax_highlighter: rouge
+
+# Collections — one per project
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+
+# Exclude files from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
