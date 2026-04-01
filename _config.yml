@@ -2,27 +2,34 @@ title: "Sebastien"
 description: "Notes on mathematics, simulation, and code."
 author: Sebastien
 email: ""
-
+ 
 baseurl: ""
 url: "https://gaba5.github.io"
-
+ 
 # Build settings
 markdown: kramdown
 highlighter: rouge
-theme: null   # No gem theme — we use our own layout
-
+ 
+# Explicitly disable any gem-based theme so GitHub Pages uses _layouts/ directly
+theme: ~
+remote_theme: ""
+ 
 kramdown:
   math_engine: null  # MathJax is loaded manually in the layout
   input: GFM
   syntax_highlighter: rouge
-
-# Collections — one per project
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+ 
+# Collections
 collections:
   projects:
     output: true
     permalink: /projects/:name/
-
-# Defaults
+ 
+# Layout defaults — these apply even without front matter
+# but every page should still have explicit layout: in its front matter
 defaults:
   - scope:
       path: ""
@@ -34,7 +41,12 @@ defaults:
       type: "pages"
     values:
       layout: "default"
-
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "default"
+ 
 # Exclude files from build
 exclude:
   - README.md
@@ -42,3 +54,4 @@ exclude:
   - Gemfile.lock
   - node_modules/
   - vendor/
+ 
