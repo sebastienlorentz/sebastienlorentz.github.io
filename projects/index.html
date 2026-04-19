@@ -1,88 +1,50 @@
----
-layout: default
-title: Projects
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects &mdash; Sebastien</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+</head>
+<body>
 
-<style>
-  .projects-header {
-    padding-bottom: 1.8rem;
-    border-bottom:  1px solid var(--border);
-    margin-bottom:  2.5rem;
-  }
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Sebastien</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/projects/" class="active">Projects</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
 
-  .project-list {
-    display:       flex;
-    flex-direction: column;
-    gap:           1px;
-    background:    var(--border);
-    border:        1px solid var(--border);
-    border-radius: 6px;
-    overflow:      hidden;
-  }
-
-  .project-row {
-    display:         grid;
-    grid-template-columns: 1fr auto;
-    align-items:     start;
-    gap:             1rem;
-    background:      var(--bg);
-    padding:         1.3rem 1.6rem;
-    text-decoration: none;
-    transition:      background 0.2s;
-  }
-  .project-row:hover { background: var(--surface); }
-
-  .row-title {
-    font-family:   var(--font-serif);
-    font-size:     1.08rem;
-    color:         var(--text);
-    margin-bottom: 0.25rem;
-  }
-  .row-desc {
-    font-size:     0.82rem;
-    color:         var(--text-dim);
-    line-height:   1.5;
-    margin-bottom: 0.5rem;
-  }
-  .row-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-  .row-tag {
-    font-family:    var(--font-mono);
-    font-size:      0.57rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border:         1px solid var(--border);
-    border-radius:  2px;
-    padding:        0.1em 0.45em;
-    color:          var(--muted);
-  }
-  .row-date {
-    font-family:    var(--font-mono);
-    font-size:      0.65rem;
-    color:          var(--text-dim);
-    white-space:    nowrap;
-    padding-top:    0.15rem;
-  }
-</style>
-
-<div class="projects-header">
+<main>
   <h1>Projects</h1>
-</div>
 
-<div class="project-list">
+  <div class="project-list" style="margin-top: 1.5rem;">
 
-  <a class="project-row" href="/projects/voronoi.html">
-    <div>
-      <div class="row-title">Voronoi Diagrams</div>
-      <div class="row-desc">Per-pixel Voronoi colouring with edge detection, built in p5.js.</div>
-      <div class="row-tags">
-        <span class="row-tag">geometry</span>
-        <span class="row-tag">p5.js</span>
-        <span class="row-tag">visualisation</span>
+    <a class="project-item" href="/projects/voronoi.html">
+      <div>
+        <div class="item-title">Voronoi Diagrams</div>
+        <div class="item-desc">Per-pixel Voronoi colouring with edge detection, built in p5.js.</div>
+        <div class="item-tags">
+          <span class="item-tag">geometry</span>
+          <span class="item-tag">p5.js</span>
+          <span class="item-tag">visualisation</span>
+        </div>
       </div>
-    </div>
-    <div class="row-date">Apr 2026</div>
-  </a>
+      <div class="item-date">Apr 2026</div>
+    </a>
 
-  <!-- Add a new .project-row block here for each new project -->
+    <!-- Copy the block above for each new project -->
 
-</div>
+  </div>
+</main>
+
+<footer>
+  <p>Sebastien &mdash; hosted on GitHub Pages</p>
+</footer>
+
+</body>
+</html>

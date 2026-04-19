@@ -1,96 +1,90 @@
----
-layout: default
-title: About
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About &mdash; Sebastien</title>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath:  [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
+        packages:    {'[+]': ['ams']}
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
 
-<style>
-  .about-header {
-    padding-bottom: 2rem;
-    border-bottom:  1px solid var(--border);
-    margin-bottom:  2.5rem;
-  }
-  .about-header h1     { font-size: 2.6rem; margin-bottom: 0.3rem; }
-  .about-header .sub   {
-    font-family:    var(--font-mono);
-    font-size:      0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color:          var(--text-dim);
-  }
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Sebastien</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/about.html" class="active">About</a></li>
+    </ul>
+  </div>
+</nav>
 
-  .interest-grid {
-    display:          grid;
-    grid-template-columns: 1fr 1fr;
-    gap:              1px;
-    background:       var(--border);
-    border:           1px solid var(--border);
-    border-radius:    6px;
-    overflow:         hidden;
-    margin:           1.5rem 0 2.5rem;
-  }
-  .interest-cell { background: var(--bg); padding: 1rem 1.2rem; }
-  .interest-label {
-    font-family:    var(--font-mono);
-    font-size:      0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color:          var(--text-dim);
-    margin-bottom:  0.35rem;
-  }
-  .interest-value { font-family: var(--font-serif); font-size: 0.95rem; }
-
-  @media (max-width: 500px) {
-    .interest-grid { grid-template-columns: 1fr; }
-  }
-</style>
-
-<div class="about-header">
+<main>
   <h1>About</h1>
-  <p class="sub">Applied mathematics &middot; Durham University</p>
-</div>
+  <span class="page-sub">Applied mathematics &middot; Durham University</span>
 
-<p>
-  I'm a mathematics student with a focus on applied and computational methods.
-  This site collects small projects I build to understand something better —
-  usually at the boundary of theory and simulation.
-</p>
+  <p>
+    I'm a mathematics student interested in applied and computational methods.
+    This site collects small projects I build to understand things better &mdash;
+    usually at the boundary of theory and simulation.
+  </p>
 
-<h2>Interests</h2>
+  <h2>Interests</h2>
 
-<div class="interest-grid">
-  <div class="interest-cell">
-    <div class="interest-label">Mathematics</div>
-    <div class="interest-value">Mathematical biology, complex analysis, stochastic processes</div>
+  <div class="interest-grid">
+    <div class="interest-cell">
+      <div class="interest-label">Mathematics</div>
+      <div class="interest-value">Mathematical biology, complex analysis, dynamical systems</div>
+    </div>
+    <div class="interest-cell">
+      <div class="interest-label">Simulation</div>
+      <div class="interest-value">Cellular automata, spatial models, reaction&ndash;diffusion systems</div>
+    </div>
+    <div class="interest-cell">
+      <div class="interest-label">Visualisation</div>
+      <div class="interest-value">p5.js, MATLAB, Python</div>
+    </div>
+    <div class="interest-cell">
+      <div class="interest-label">Other</div>
+      <div class="interest-value">Astrophotography, narrowband imaging</div>
+    </div>
   </div>
-  <div class="interest-cell">
-    <div class="interest-label">Simulation</div>
-    <div class="interest-value">Cellular automata, spatial models, reaction&ndash;diffusion systems</div>
-  </div>
-  <div class="interest-cell">
-    <div class="interest-label">Visualisation</div>
-    <div class="interest-value">p5.js, MATLAB, Python &mdash; making the abstract visible</div>
-  </div>
-  <div class="interest-cell">
-    <div class="interest-label">Other</div>
-    <div class="interest-value">Astrophotography, narrowband imaging, continuum subtraction</div>
-  </div>
-</div>
 
-<h2>Tools</h2>
+  <h2>About this site</h2>
 
-<p>
-  I reach for <strong>MATLAB</strong> for numerical work, <strong>Python</strong> for
-  scripting and data, and <strong>p5.js</strong> for anything that benefits from an
-  interactive canvas. Mathematics on this site is rendered with MathJax 3 &mdash;
-  inline expressions like \(f(z) = z^2\) and display equations like
-</p>
+  <p>
+    Pure static HTML hosted on GitHub Pages. Mathematics is rendered with
+    MathJax 3 &mdash; for example, the residue theorem:
+  </p>
 
-\[
-  \oint_\gamma f(z)\,\mathrm{d}z = 2\pi i \sum_k \operatorname{Res}(f,\, z_k)
-\]
+  \[
+    \oint_\gamma f(z)\,\mathrm{d}z
+    = 2\pi i \sum_k \operatorname{Res}(f,\, z_k)
+  \]
 
-<p>render correctly in any browser without any server-side processing.</p>
+  <p>
+    Inline maths like \(e^{i\pi} + 1 = 0\) works too. No build step, no Jekyll,
+    no pre-processing.
+  </p>
 
-<h2>Contact</h2>
+  <h2>Contact</h2>
+  <p>Find me via the GitHub links on each project page.</p>
+</main>
 
-<p>The best way to reach me is via the GitHub profile linked on each project page.</p>
+<footer>
+  <p>Sebastien &mdash; hosted on GitHub Pages</p>
+</footer>
+
+</body>
+</html>
