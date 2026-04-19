@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Voronoi Diagrams &mdash; Sebastien</title>
+  <title>Cobweb Plot</title>
   <link rel="stylesheet" href="../assets/css/main.css" />
 
   <!--
@@ -51,9 +51,9 @@
   <a class="back-link" href="/projects/">&larr; All projects</a>
 
   <div class="project-header">
-    <h1>Voronoi Diagrams</h1>
+    <h1>Cobweb Plots</h1>
     <p style="color:var(--text-dim); margin-bottom:0;">
-      Per-pixel Voronoi colouring with edge detection, built in p5.js.
+      Cobweb plot visualiser, built in p5.js.
     </p>
     <div class="project-meta">
       <span>Apr 2026</span>
@@ -61,7 +61,7 @@
       <span><a href="https://github.com/yourusername/voronoi-p5" target="_blank" rel="noopener">GitHub &nearr;</a></span>
     </div>
     <div class="tag-list">
-      <span class="tag">geometry</span>
+      <span class="tag">dynamical systems</span>
       <span class="tag">p5.js</span>
       <span class="tag">visualisation</span>
     </div>
@@ -72,15 +72,11 @@
   <h2>Overview</h2>
 
   <p>
-    A Voronoi diagram partitions the plane into regions based on proximity to a
-    set of seed points. Each region \(V_i\) consists of all points closer to
-    seed \(\mathbf{s}_i\) than to any other seed:
+   A cobweb plot is a tool for visualsing the behaviour of discrete 1D iterated functions, functions of the form 
+   \(x_{n+1}=f(x_n)\). Going forward we will be using the logistic map as an example, with
   </p>
 
-  \[
-    V_i = \Bigl\{\, \mathbf{x} \in \mathbb{R}^2 :
-      \|\mathbf{x} - \mathbf{s}_i\| \leq \|\mathbf{x} - \mathbf{s}_j\|
-      \;\text{for all}\; j \neq i \,\Bigr\}
+  \[x_{n+1}=rx_n(1-x_n)
   \]
 
   <p>
@@ -94,13 +90,13 @@
   <h2>Demo</h2>
 
   <div class="demo-wrap">
-    <div class="demo-label">Interactive &mdash; click canvas to regenerate</div>
+    <div class="demo-label">Cobweb plot of logistic map</div>
     <div class="demo-body">
       <div id="sketch"></div>
     </div>
   </div>
 
-  <script src="voronoi/sketch.js"></script>
+  <script src="cobweb/sketch.js"></script>
 
   <!-- ── Implementation notes ── -->
 
@@ -148,27 +144,26 @@
 
   <!-- ── Source ── -->
 
-  <h2>Source</h2>
+  <h2>Implementation</h2>
+  <h3>Entire code found on Github</h3>
+  <p>The cobweb loop:</p>
 
-  <p>The core loop, around 20 lines:</p>
-
-<pre><code>for (let y = 0; y &lt; H; y++) {
-  for (let x = 0; x &lt; W; x++) {
-    let minD = Infinity, secD = Infinity, nearest = 0;
-    for (let i = 0; i &lt; seeds.length; i++) {
-      let d = (x - seeds[i].x) ** 2 + (y - seeds[i].y) ** 2;
-      if (d &lt; minD) { secD = minD; minD = d; nearest = i; }
-      else if (d &lt; secD) { secD = d; }
-    }
-    let onEdge = (Math.sqrt(secD) - Math.sqrt(minD)) &lt; 2.5;
-    // assign pixel colour from cols[nearest], dimmed if onEdge
+<pre><code>
+  let x0 = 0.1;
+  let y0 = 0;
+  for (let i = 0; i < n_iters; i++) {
+    let fx = r * x0 * (1 - x0);
+    line(cx(x0), cy(y0), cx(x0), cy(fx));
+    line(cx(x0), cy(fx), cx(fx), cy(fx));
+    y0 = fx;
+    x0 = fx;
   }
-}</code></pre>
+</code></pre>
 
 </main>
 
 <footer>
-  <p>Sebastien &mdash; hosted on GitHub Pages</p>
+  <p>Sebastien Lorentz &mdash; hosted on GitHub Pages</p>
 </footer>
 
 </body>
