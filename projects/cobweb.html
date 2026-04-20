@@ -6,18 +6,11 @@
   <title>Cobweb Plot</title>
   <link rel="stylesheet" href="../assets/css/main.css" />
 
-  <!--
-    MathJax 3 setup.
-    - Config object must be defined BEFORE the script tag loads.
-    - We use \( \) and \[ \] delimiters — these are not touched by any
-      pre-processor since this is plain HTML with no Jekyll.
-    - The async attribute is fine: MathJax queues a typeset pass after load.
-  -->
   <script>
     window.MathJax = {
       tex: {
-        inlineMath:  [['\\(', '\\)']],
-        displayMath: [['\\[', '\\]']],
+        inlineMath:  [['$', '$']],
+        displayMath: [['$$', '$$']],
         packages:    {'[+]': ['ams']}
       },
       options: {
@@ -26,20 +19,14 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-
-  <!--
-    p5.js — loaded synchronously (no async/defer) so it is available
-    when the inline sketch script in the body executes.
-  -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a class="nav-brand" href="/">Sebastien</a>
+    <a class="nav-brand" href="/">Home</a>
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
       <li><a href="/projects/" class="active">Projects</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
@@ -58,7 +45,7 @@
     <div class="project-meta">
       <span>Apr 2026</span>
       <span>JavaScript (p5.js)</span>
-      <span><a href="https://github.com/yourusername/voronoi-p5" target="_blank" rel="noopener">GitHub &nearr;</a></span>
+      <span><a href="https://github.com/gaba5/gaba5.github.io/tree/main/projects/cobweb" target="_blank" rel="noopener">GitHub &nearr;</a></span>
     </div>
     <div class="tag-list">
       <span class="tag">dynamical systems</span>
@@ -67,85 +54,63 @@
     </div>
   </div>
 
-  <!-- ── Overview ── -->
-
   <h2>Overview</h2>
 
   <p>
-   A cobweb plot is a tool for visualsing the behaviour of discrete 1D iterated functions, functions of the form 
-   \(x_{n+1}=f(x_n)\). Going forward we will be using the logistic map as an example, with
+    A cobweb plot is a tool for visualsing the behaviour of discrete 1D iterated functions, functions of the form
+    $x_{n+1}=f(x_n)$. Going forward we will be using the <a href="https://en.wikipedia.org/wiki/Logistic_map#" target="_blank">logistic map</a> as an example, with
   </p>
 
-  \[x_{n+1}=rx_n(1-x_n)
-  \]
+  $$x_{n+1}=rx_n(1-x_n)$$
 
   <p>
-    This implementation uses a brute-force per-pixel approach: for every pixel
-    \((x, y)\), compute the Euclidean distance to each seed and assign the pixel
-    to the nearest one.
+    A cobweb plot is useful for examining the long run behaviour of the recurrence relation in question starting from a given $x_0$.
   </p>
 
-  <!-- ── Demo ── -->
+  <h2>Method</h2>
+
+  <p>For a given recurrence relation $x_{n+1}=f(x_n)$ and initial value $x_0$ we begin by plotting the curves $y=x$ and $y=f(x)$. Then:
+  <ol>
+    <li>Draw a vertical line between the points $(x_0, 0)$ and $(x_0, f(x_0))$</li>
+    <li>Draw a horizontal line between the points $(x_0, f(x_0))$ and $(f(x_0), f(x_0))$</li>
+    <li>Draw a vertical line between the points $(f(x_0), f(x_0))$ and $(f(x_0), f(f(x_0)))$</li>
+    <li>Set $x_0 = f(x_0)$</li>
+    <li>Repeat from step 2 for a set number of iterations</li>
+  </ol>
+  </p>
+
+  <h2>Interpretation</h2>
+  <p>
+  A cobweb plot allows us to classify the stability of fixed points of the map.
+  A fixed point $x^*$ satisfies $f(x^*) = x^*$ and corresponds to an intersection
+  of the curve $y = f(x)$ with the diagonal $y = x$. If the cobweb spirals inward
+  toward such an intersection, the fixed point is stable. If the cobweb spirals outward or diverges away, the fixed point
+  is unstable. As $r$ increases, the logistic map transitions from stable fixed points to bifurcations and eventually chaotic behaviour.
+  </p>
 
   <h2>Demo</h2>
-
+  <p>
+    Below is an demonstration of the cobweb plot of the logistic map, here we are sweeping the value of $r$ from $0$ to $4$
+    with an $x_0$ of $0.1$ and an iteration depth of $50$
+  </p>
   <div class="demo-wrap">
-    <div class="demo-label">Cobweb plot of logistic map</div>
+    <div class="demo-label">Cobweb plot of logistic map with varying <span style="text-transform: none;">$r$</span></div>
     <div class="demo-body">
-      <div id="sketch"></div>
+      <iframe src="cobweb/sketch1.html" width="400" height="450" frameborder="0" scrolling="no"></iframe>
+    </div>
+  </div>
+<p>
+  Here we are instead varying $x_0$ from $0$ to $1$, keeping a fixed $r=3$
+</p>
+  <div class="demo-wrap">
+    <div class="demo-label">Cobweb plot of logistic map with varying <span style="text-transform: none;">$x_0$</span></div>
+    <div class="demo-body">
+      <iframe src="cobweb/sketch2.html" width="400" height="450" frameborder="0" scrolling="no"></iframe>
     </div>
   </div>
 
-  <script src="cobweb/sketch.js"></script>
-
-  <!-- ── Implementation notes ── -->
-
-  <h2>Implementation notes</h2>
-
-  <h3>Complexity</h3>
-
-  <p>
-    For \(N\) seeds and a \(W \times H\) canvas, the brute-force approach runs
-    in \(O(N \cdot W \cdot H)\). Here (\(N = 24\), \(560 \times 340\)) that is
-    around 4.6 million distance computations per frame. This is fine for a
-    one-shot render but does not scale.
-    <a href="https://en.wikipedia.org/wiki/Fortune%27s_algorithm" target="_blank" rel="noopener">Fortune's algorithm</a>
-    constructs the diagram in \(O(N \log N)\).
-  </p>
-
-  <h3>Edge detection</h3>
-
-  <p>
-    Edges are detected per-pixel rather than traced geometrically. A pixel at
-    \((x,y)\) is classified as a boundary pixel when the difference between its
-    nearest and second-nearest seed distances falls below a threshold
-    \(\varepsilon\):
-  </p>
-
-  \[
-    \text{edge}(x,y)
-    \iff
-    d_2(x,y) - d_1(x,y) < \varepsilon
-  \]
-
-  <p>
-    With \(\varepsilon = 2.5\) px this gives clean single-pixel-wide edges
-    without any geometric boundary tracing.
-  </p>
-
-  <h3>Pixel density</h3>
-
-  <p>
-    <code>pixelDensity(1)</code> must be called in <code>setup()</code>.
-    On HiDPI displays the default density is 2, so the pixel buffer is
-    four times larger than expected and index arithmetic silently produces
-    a corrupted image.
-  </p>
-
-  <!-- ── Source ── -->
-
   <h2>Implementation</h2>
-  <h3>Entire code found on Github</h3>
+  <h3>The entire script can be found on the linked Github, below is a snippet of the main loop</h3>
   <p>The cobweb loop:</p>
 
 <pre><code>

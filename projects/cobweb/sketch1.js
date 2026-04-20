@@ -1,11 +1,11 @@
-let r = 0.1;
+let r = 0;
 const n_iters = 50;
 const n_points = 500;
 const max_r=4;
 const delta_r=0.02;
 
 function setup() {
-  createCanvas(400, 400).parent('sketch');
+  createCanvas(400, 400)
 }
 
 function draw() {
