@@ -82,7 +82,7 @@ function draw() {
   stroke(255, 0, 0);
   strokeWeight(1);
   let x = x0;  // local copy — do not modify x0
-  let y0 = 0;
+  let y0 = x0;
   for (let i = 0; i < n_iters; i++) {
     let fx = r * x * (1 - x);
     line(cx(x), cy(y0), cx(x), cy(fx));

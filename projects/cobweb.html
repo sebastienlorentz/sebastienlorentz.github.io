@@ -57,21 +57,21 @@
   <h2>Overview</h2>
 
   <p>
-    A cobweb plot is a tool for visualsing the behaviour of discrete 1D iterated functions, functions of the form
+    A cobweb plot is a tool for visualising the behaviour of discrete 1D iterated functions, functions of the form
     $x_{n+1}=f(x_n)$. Going forward we will be using the <a href="https://en.wikipedia.org/wiki/Logistic_map#" target="_blank">logistic map</a> as an example, with
   </p>
 
   $$x_{n+1}=rx_n(1-x_n)$$
 
   <p>
-    A cobweb plot is useful for examining the long run behaviour of the recurrence relation in question starting from a given $x_0$.
+    A cobweb plot is useful for examining the long-run behaviour of the recurrence relation in question starting from a given $x_0$.
   </p>
 
   <h2>Method</h2>
 
   <p>For a given recurrence relation $x_{n+1}=f(x_n)$ and initial value $x_0$ we begin by plotting the curves $y=x$ and $y=f(x)$. Then:
   <ol>
-    <li>Draw a vertical line between the points $(x_0, 0)$ and $(x_0, f(x_0))$</li>
+    <li>Draw a vertical line between the points $(x_0, x_0)$ and $(x_0, f(x_0))$</li>
     <li>Draw a horizontal line between the points $(x_0, f(x_0))$ and $(f(x_0), f(x_0))$</li>
     <li>Draw a vertical line between the points $(f(x_0), f(x_0))$ and $(f(x_0), f(f(x_0)))$</li>
     <li>Set $x_0 = f(x_0)$</li>
@@ -90,8 +90,8 @@
 
   <h2>Demo</h2>
   <p>
-    Below is an demonstration of the cobweb plot of the logistic map, here we are sweeping the value of $r$ from $0$ to $4$
-    with an $x_0$ of $0.1$ and an iteration depth of $50$
+    Below is a demonstration of the cobweb plot of the logistic map, here we are sweeping the value of $r$ from $0$ to $4$
+    with $x_0=0.1$ and an iteration depth of $50$
   </p>
   <div class="demo-wrap">
     <div class="demo-label">Cobweb plot of logistic map with varying <span style="text-transform: none;">$r$</span></div>
@@ -100,7 +100,7 @@
     </div>
   </div>
 <p>
-  Here we are instead varying $x_0$ from $0$ to $1$, keeping a fixed $r=3$
+  Here we are keeping $r=3$ fixed and instead varying $x_0$ from $0$ to $1$ 
 </p>
   <div class="demo-wrap">
     <div class="demo-label">Cobweb plot of logistic map with varying <span style="text-transform: none;">$x_0$</span></div>
@@ -110,7 +110,7 @@
   </div>
 
   <h2>Implementation</h2>
-  <h3>The entire script can be found on the linked Github, below is a snippet of the main loop</h3>
+  <h3>The entire script can be found on the linked Github. Below is a snippet of the main loop</h3>
   <p>The cobweb loop:</p>
 
 <pre><code>
