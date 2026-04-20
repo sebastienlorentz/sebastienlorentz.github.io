@@ -38,18 +38,18 @@
   <a class="back-link" href="/projects/">&larr; All projects</a>
 
   <div class="project-header">
-    <h1>Cobweb Plots</h1>
+    <h1>Cellular Potts Model</h1>
     <p style="color:var(--text-dim); margin-bottom:0;">
       Cobweb plot visualiser, built in p5.js.
     </p>
     <div class="project-meta">
       <span>Apr 2026</span>
       <span>JavaScript (p5.js)</span>
-      <span><a href="https://github.com/gaba5/gaba5.github.io/tree/main/projects/cobweb" target="_blank" rel="noopener">GitHub &nearr;</a></span>
+      <span><a href="https://github.com/gaba5/gaba5.github.io/tree/main/projects/CPM" target="_blank" rel="noopener">GitHub &nearr;</a></span>
     </div>
     <div class="tag-list">
       <span class="tag">dynamical systems</span>
-      <span class="tag">p5.js</span>
+      <span class="tag">MATLAB</span>
       <span class="tag">visualisation</span>
     </div>
   </div>
@@ -58,7 +58,7 @@
 
   <p>
     A cobweb plot is a tool for visualising the behaviour of discrete 1D iterated functions, functions of the form
-    $x_{n+1}=f(x_n)$. As an example, we take the <a href="https://en.wikipedia.org/wiki/Logistic_map#" target="_blank">logistic map</a>, with
+    $x_{n+1}=f(x_n)$. Going forward we will be using the <a href="https://en.wikipedia.org/wiki/Logistic_map#" target="_blank">logistic map</a> as an example, with
   </p>
 
   $$x_{n+1}=rx_n(1-x_n)$$
@@ -90,7 +90,7 @@
 
   <h2>Demo</h2>
   <p>
-    Below is a demonstration of the cobweb plot of the logistic map. Here $r$ is swept from $0$ to $4$ with $x_0=0.1$ and an iteration depth of $50$
+    Below is a demonstration of the cobweb plot of the logistic map, here we are sweeping the value of $r$ from $0$ to $4$
     with $x_0=0.1$ and an iteration depth of $50$
   </p>
   <div class="demo-wrap">
@@ -115,7 +115,7 @@
 
 <pre><code>
   let x0 = 0.1;
-  let y0 = x0;
+  let y0 = 0;
   for (let i = 0; i < n_iters; i++) {
     let fx = r * x0 * (1 - x0);
     line(cx(x0), cy(y0), cx(x0), cy(fx));
