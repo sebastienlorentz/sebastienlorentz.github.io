@@ -6,7 +6,14 @@ const max_x=1;
 const delta_x=0.005;
 
 function setup() {
-  createCanvas(350, 350)
+  pixelDensity(1);
+  let size = document.body.offsetWidth;
+  createCanvas(size, size);
+}
+
+function windowResized() {
+  let size = document.body.offsetWidth;
+  resizeCanvas(size, size);
 }
 
 function draw() {
