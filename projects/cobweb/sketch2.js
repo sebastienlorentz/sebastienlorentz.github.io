@@ -6,7 +6,7 @@ const max_x=1;
 const delta_x=0.005;
 
 function setup() {
-  createCanvas(400, 400)
+  createCanvas(350, 350)
 }
 
 function draw() {

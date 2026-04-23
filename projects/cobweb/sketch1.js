@@ -5,7 +5,7 @@ const max_r=4;
 const delta_r=0.02;
 
 function setup() {
-  createCanvas(400, 400)
+  createCanvas(350, 350)
 }
 
 function draw() {
