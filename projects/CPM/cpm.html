@@ -40,15 +40,15 @@
   <div class="project-header">
     <h1>Cellular Potts Model</h1>
     <p style="color:var(--text-dim); margin-bottom:0;">
-      Cobweb plot visualiser, built in p5.js.
+      CPM simulation, built in MATLAB.
     </p>
     <div class="project-meta">
       <span>Apr 2026</span>
-      <span>JavaScript (p5.js)</span>
+      <span>MATLAB</span>
       <span><a href="https://github.com/gaba5/gaba5.github.io/tree/main/projects/CPM" target="_blank" rel="noopener">GitHub &nearr;</a></span>
     </div>
     <div class="tag-list">
-      <span class="tag">dynamical systems</span>
+      <span class="tag">Monte Carlo methods</span>
       <span class="tag">MATLAB</span>
       <span class="tag">visualisation</span>
     </div>
@@ -57,57 +57,32 @@
   <h2>Overview</h2>
 
   <p>
-    A cobweb plot is a tool for visualising the behaviour of discrete 1D iterated functions, functions of the form
-    $x_{n+1}=f(x_n)$. Going forward we will be using the <a href="https://en.wikipedia.org/wiki/Logistic_map#" target="_blank">logistic map</a> as an example, with
+    The <a href="https://en.wikipedia.org/wiki/Cellular_Potts_model" target="_blank">Cellular Potts Model</a> 
+    (CPM) is a lattice-based model for simulating the dynamics
+  of interacting cells. Originally developed to study cell sorting, the model assigns
+  each site on an $N \times N$ grid to a cell type, and evolves the system through a
+  sequence of Monte Carlo steps in which proposed site updates are accepted or rejected
+  according to a Boltzmann probability dependent on the change in energy. The energy of
+  the system is governed by a Hamiltonian encoding two competing effects: differential
+  adhesion, which drives cells of the same type to cluster together, and a volume
+  constraint, which penalises deviations from a prescribed target volume. This project
+  investigates the qualitative cell-sorting behaviour produced by the CPM and examines
+  how varying the parameters of the Hamiltonian affects pattern formation.
   </p>
 
-  $$x_{n+1}=rx_n(1-x_n)$$
-
-  <p>
-    A cobweb plot is useful for examining the long-run behaviour of the recurrence relation in question starting from a given $x_0$.
-  </p>
 
   <h2>Method</h2>
 
-  <p>For a given recurrence relation $x_{n+1}=f(x_n)$ and initial value $x_0$ we begin by plotting the curves $y=x$ and $y=f(x)$. Then:
-  <ol>
-    <li>Draw a vertical line between the points $(x_0, x_0)$ and $(x_0, f(x_0))$</li>
-    <li>Draw a horizontal line between the points $(x_0, f(x_0))$ and $(f(x_0), f(x_0))$</li>
-    <li>Draw a vertical line between the points $(f(x_0), f(x_0))$ and $(f(x_0), f(f(x_0)))$</li>
-    <li>Set $x_0 = f(x_0)$</li>
-    <li>Repeat from step 2 for a set number of iterations</li>
-  </ol>
-  </p>
+  <h2>The Hamiltonian</h2>
+$$
+H =
+\sum_{\text{neighbours}} J\!\left(\sigma_{(i,j)}, \sigma_{(i',j')}\right)
+\left(1-\delta_{\sigma_{(i,j)},\sigma_{(i',j')}}\right)
++ \lambda_v \sum_{\sigma=1}^{n} \left( v(\sigma) - V_T(\sigma) \right)^2 .
+$$
 
-  <h2>Interpretation</h2>
-  <p>
-  A cobweb plot allows us to classify the stability of fixed points of the map.
-  A fixed point $x^*$ satisfies $f(x^*) = x^*$ and corresponds to an intersection
-  of the curve $y = f(x)$ with the diagonal $y = x$. If the cobweb spirals inward
-  toward such an intersection, the fixed point is stable. If the cobweb spirals outward or diverges away, the fixed point
-  is unstable. As $r$ increases, the logistic map transitions from stable fixed points to bifurcations and eventually chaotic behaviour.
-  </p>
-
-  <h2>Demo</h2>
-  <p>
-    Below is a demonstration of the cobweb plot of the logistic map, here we are sweeping the value of $r$ from $0$ to $4$
-    with $x_0=0.1$ and an iteration depth of $50$
-  </p>
-  <div class="demo-wrap">
-    <div class="demo-label">Cobweb plot of logistic map with varying <span style="text-transform: none;">$r$</span></div>
-    <div class="demo-body">
-      <iframe src="sketch1.html" width="400" height="450" frameborder="0" scrolling="no"></iframe>
-    </div>
-  </div>
-<p>
-  Here we are keeping $r=3$ fixed and instead varying $x_0$ from $0$ to $1$ 
-</p>
-  <div class="demo-wrap">
-    <div class="demo-label">Cobweb plot of logistic map with varying <span style="text-transform: none;">$x_0$</span></div>
-    <div class="demo-body">
-      <iframe src="sketch2.html" width="400" height="450" frameborder="0" scrolling="no"></iframe>
-    </div>
-  </div>
+  <h2>Results</h2>
+  
 
   <h2>Implementation</h2>
   <h3>The entire script can be found on the linked Github. Below is a snippet of the main loop</h3>

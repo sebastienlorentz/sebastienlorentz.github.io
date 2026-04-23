@@ -300,6 +300,13 @@ footer p {
   background:      #fff;
 }
 
+figcaption {
+  font-size:   0.82rem;
+  color:       var(--text-dim);
+  margin-top:  0.5rem;
+  text-align:  center;
+}
+
 /* ── Responsive ── */
 @media (max-width: 580px) {
   html { font-size: 17px; }
