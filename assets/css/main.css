@@ -316,3 +316,75 @@ figcaption {
   .project-item { flex-direction: column; gap: 0.2rem; }
   .item-date { display: none; }
 }
+
+.juniper-wrap {
+  margin:        1.8rem 0;
+  border:        1px solid var(--border);
+  border-radius: 4px;
+  overflow:      hidden;
+}
+
+.juniper-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         0.45rem 1rem;
+  border-bottom:   1px solid var(--border);
+  background:      var(--bg);
+}
+
+.juniper-header-label {
+  font-family:    var(--mono);
+  font-size:      0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--text-dim);
+}
+
+.juniper-header-lang {
+  font-family:    var(--mono);
+  font-size:      0.6rem;
+  letter-spacing: 0.06em;
+  color:          var(--text-dim);
+  background:     var(--surface);
+  border:         1px solid var(--border);
+  border-radius:  2px;
+  padding:        0.1em 0.45em;
+}
+
+.juniper-cell { display: flex; flex-direction: column; }
+
+.juniper-input { border-bottom: 1px solid var(--border); }
+
+.juniper-button {
+  font-family:    var(--mono);
+  font-size:      0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background:     var(--surface);
+  border:         none;
+  border-bottom:  1px solid var(--border);
+  color:          var(--text-dim);
+  padding:        0.5rem 1rem;
+  cursor:         pointer;
+  text-align:     left;
+  transition:     background 0.15s, color 0.15s;
+  width:          100%;
+}
+
+.juniper-button:hover {
+  background: var(--border);
+  color:      var(--text);
+}
+
+.juniper-output {
+  font-family: var(--mono);
+  font-size:   0.78rem;
+  line-height: 1.6;
+  padding:     0.85rem 1rem;
+  background:  var(--bg);
+  color:       var(--text);
+  white-space: pre-wrap;
+}
+
+.juniper-output:empty { display: none; }
