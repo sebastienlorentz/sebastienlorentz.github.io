@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cobweb Plot</title>
   <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
   <script>
     window.MathJax = {
@@ -70,6 +71,20 @@
   how varying the parameters of the Hamiltonian affects pattern formation.
   </p>
 
+  <div class="demo-wrap">
+  <div class="demo-label">Interactive — edit and run Python</div>
+  <pre data-executable data-language="python">
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 2 * np.pi, 500)
+plt.plot(x, np.sin(x))
+plt.xlabel('x')
+plt.ylabel('sin(x)')
+plt.title('Sine wave')
+plt.show()  
+</pre>
+</div>
 
   <h2>Method</h2>
 
@@ -99,6 +114,22 @@ $$
     x0 = fx;
   }
 </code></pre>
+
+<script src="https://unpkg.com/juniper-js/dist/juniper.min.js"></script>
+
+<script>
+fetch('https://mybinder.org/v2/gh/gaba5/gaba5.github.io/main', {mode: 'no-cors'})
+  .catch(function() {});
+</script>
+
+<script>
+  new Juniper({
+    repo:        'gaba5/gaba5.github.io',
+    branch:      'main',
+    kernelType:  'python3',
+    defaultLang: 'python'
+  });
+</script>
 
 </main>
 
