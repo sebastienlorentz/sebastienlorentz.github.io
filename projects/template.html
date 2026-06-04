@@ -206,8 +206,19 @@ function example() {
 
 <!-- Binder warm-up: silently starts the container on page load -->
 <script>
-  fetch('https://mybinder.org/v2/gh/gaba5/gaba5.github.io/main', {mode: 'no-cors'})
-    .catch(function() {});
+  // Open a streaming connection to Binder to trigger container warm-up
+  var binderUrl = 'https://mybinder.org/build/gh/gaba5/gaba5.github.io/main';
+  var es = new EventSource(binderUrl);
+  es.onmessage = function(e) {
+    var data = JSON.parse(e.data);
+    // Close the connection once the container is ready
+    if (data.phase === 'ready') {
+      es.close();
+    }
+  };
+  es.onerror = function() {
+    es.close();
+  };
 </script>
 
 <!-- Juniper initialisation: must come after the Juniper script in <head> -->
