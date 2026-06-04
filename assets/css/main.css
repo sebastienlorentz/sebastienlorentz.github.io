@@ -354,6 +354,19 @@ figcaption {
 }
 .juniper-output:empty { display: none; }
 
+/* ── Figure row ── */
+figure { margin: 1.8rem 0; }
+.figure-row {
+  display: flex;
+  gap: 0.3rem;
+  justify-content: center;
+}
+.figure-row img {
+  flex: 1;
+  min-width: 0;
+  object-fit: contain;
+}
+
 /* ── Responsive ── */
 @media (max-width: 580px) {
   html { font-size: 17px; }

@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- ═══════════════════════════════════════════════
-       PAGE TITLE — update for each project
+       PAGE TITLE: update for each project
        ═══════════════════════════════════════════════ -->
-  <title>Project Title &mdash; Sebastien Lorentz</title>
+  <title>Project Title | Sebastien Lorentz</title>
 
   <!-- ═══════════════════════════════════════════════
-       META TAGS — update description for each project
+       META TAGS: update description for each project
        ═══════════════════════════════════════════════ -->
   <meta name="description" content="One sentence description of this project." />
-  <meta property="og:title" content="Project Title — Sebastien Lorentz" />
+  <meta property="og:title" content="Project Title | Sebastien Lorentz" />
   <meta property="og:description" content="One sentence description of this project." />
   <meta property="og:url" content="https://sebastienlorentz.com/projects/your-project/your-project.html" />
   <meta property="og:type" content="article" />
@@ -24,14 +24,14 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
   <!-- ═══════════════════════════════════════════════
-       STYLESHEET — path depends on folder depth:
+       STYLESHEET: path depends on folder depth:
        One level deep (projects/your-project.html):   ../assets/css/main.css
        Two levels deep (projects/sub/your-project.html): ../../assets/css/main.css
        ═══════════════════════════════════════════════ -->
   <link rel="stylesheet" href="../../assets/css/main.css" />
 
   <!-- ═══════════════════════════════════════════════
-       MATHJAX — include on any page with maths.
+       MATHJAX: include on any page with maths.
        Config must come BEFORE the script tag.
        Delimiters: inline \( \), display \[ \]
        or inline $, display $$
@@ -51,15 +51,15 @@
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 
   <!-- ═══════════════════════════════════════════════
-       P5.JS — include on pages with a p5 sketch.
+       P5.JS: include on pages with a p5 sketch.
        Must be synchronous (no async/defer).
-       One sketch per page — use global mode.
+       One sketch per page, use global mode.
        Sketch lives in: projects/your-project/sketch.js
        ═══════════════════════════════════════════════ -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
 
   <!-- ═══════════════════════════════════════════════
-       JUNIPER — include on pages with interactive
+       JUNIPER: include on pages with interactive
        Python or Octave code cells.
        ═══════════════════════════════════════════════ -->
   <script src="https://unpkg.com/juniper-js/dist/juniper.min.js"></script>
@@ -68,14 +68,14 @@
 <body>
 
 <!-- ═══════════════════════════════════════════════
-     NAV — same on every page, update active link
+     NAV: same on every page, update active link
      ═══════════════════════════════════════════════ -->
 <nav>
   <div class="nav-inner">
     <a class="nav-brand" href="/">Sebastien Lorentz</a>
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
       <li><a href="/projects/" class="active">Projects</a></li>
+      <li><a href="/experiments/">Experiments</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
   </div>
@@ -108,7 +108,7 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════
-       BODY CONTENT — write in plain HTML.
+       BODY CONTENT: write in plain HTML.
        Use h2 for sections, h3 for subsections.
        ═══════════════════════════════════════════════ -->
 
@@ -121,7 +121,7 @@
   \]
 
   <!-- ═══════════════════════════════════════════════
-       FIGURE WITH CAPTION — for images
+       FIGURE WITH CAPTION: for images
        ═══════════════════════════════════════════════ -->
   <figure>
     <img src="your-project/figure1.png" alt="Description of figure" style="width:100%;" />
@@ -129,7 +129,7 @@
   </figure>
 
   <!-- ═══════════════════════════════════════════════
-       MULTI-IMAGE FIGURE ROW — like LaTeX subfigures
+       MULTI-IMAGE FIGURE ROW: like LaTeX subfigures
        ═══════════════════════════════════════════════ -->
   <figure>
     <div style="display:flex; gap:0.5rem;">
@@ -143,21 +143,21 @@
   </figure>
 
   <!-- ═══════════════════════════════════════════════
-       VIDEO — for looping animations
+       VIDEO: for looping animations
        ═══════════════════════════════════════════════ -->
   <video width="100%" autoplay loop muted playsinline>
     <source src="your-project/animation.mp4" type="video/mp4" />
   </video>
 
   <!-- ═══════════════════════════════════════════════
-       P5.JS DEMO — sketch rendered via iframe.
+       P5.JS DEMO: sketch rendered via iframe.
        sketch.html is a minimal HTML file that loads
        p5 and your sketch.js.
        Use aspect-ratio to keep it square/responsive.
        Max-width caps size on desktop.
        ═══════════════════════════════════════════════ -->
   <div class="demo-wrap">
-    <div class="demo-label">Interactive &mdash; click to regenerate</div>
+    <div class="demo-label">Interactive: click to regenerate</div>
     <div class="demo-body">
       <div style="width:100%; max-width:480px; aspect-ratio:1/1;">
         <iframe src="your-project/sketch.html" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
@@ -166,12 +166,12 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════
-       JUNIPER CODE CELL — interactive Python/Octave.
+       JUNIPER CODE CELL: interactive Python/Octave.
        Change data-language to "octave" for Octave.
        Change kernelType in the init script below too.
        ═══════════════════════════════════════════════ -->
   <div class="demo-wrap">
-    <div class="demo-label">Interactive &mdash; edit and run Python</div>
+    <div class="demo-label">Interactive: edit and run Python</div>
     <pre data-executable data-language="python">
 import numpy as np
 import matplotlib.pyplot as plt
@@ -181,7 +181,7 @@ import matplotlib.pyplot as plt
   </div>
 
   <!-- ═══════════════════════════════════════════════
-       CODE SNIPPET — non-interactive, display only
+       CODE SNIPPET: non-interactive, display only
        ═══════════════════════════════════════════════ -->
   <pre><code>
 function example() {
@@ -192,14 +192,14 @@ function example() {
 </main>
 
 <!-- ═══════════════════════════════════════════════
-     FOOTER — same on every page
+     FOOTER: same on every page
      ═══════════════════════════════════════════════ -->
 <footer>
-  <p>Sebastien Lorentz &mdash; hosted on GitHub Pages</p>
+  <p>Sebastien Lorentz, hosted on GitHub Pages</p>
 </footer>
 
 <!-- ═══════════════════════════════════════════════
-     JUNIPER SCRIPTS — place at bottom of body.
+     JUNIPER SCRIPTS: place at bottom of body.
      Remove if this page has no Juniper cells.
      Change kernelType to 'octave' for Octave pages.
      ═══════════════════════════════════════════════ -->
@@ -232,7 +232,7 @@ function example() {
 </script>
 
 <!-- ═══════════════════════════════════════════════
-     P5.JS SKETCH SCRIPT — include only if this page
+     P5.JS SKETCH SCRIPT: include only if this page
      has a sketch loaded directly (not via iframe).
      If using iframes, the script lives in sketch.html.
      ═══════════════════════════════════════════════ -->

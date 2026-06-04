@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graph Force Layout | Sebastien</title>
+  <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath:  [['$', '$']],
+        displayMath: [['$$', '$$']],
+        packages:    {'[+]': ['ams']}
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Home</a>
+    <ul class="nav-links">
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/experiments/" class="active">Experiments</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <a class="back-link" href="/experiments/">&larr; All experiments</a>
+
+  <div class="project-header">
+    <h1>Graph Force Layout</h1>
+    <p style="color:var(--text-dim); margin-bottom:0;">
+      Force-directed graph layout from a list of node connections.
+    </p>
+    <div class="project-meta">
+      <span>Jun 2026</span>
+      <span>Python</span>
+      <span><a href="https://github.com/gaba5/gaba5.github.io/tree/main/experiments/Graph-forces" target="_blank" rel="noopener">GitHub &nearr;</a></span>
+    </div>
+    <div class="tag-list">
+      <span class="tag">graph theory</span>
+      <span class="tag">Python</span>
+      <span class="tag">visualisation</span>
+    </div>
+  </div>
+
+  <h2>Overview</h2>
+
+  <p>
+    The script takes a list of node connections and produces a force-directed layout of the
+    corresponding graph. Nodes are placed at random initial positions and moved at each time step
+    by the net force acting on them, settling over time into a spread-out, readable configuration.
+  </p>
+
+  <h2>Forces</h2>
+
+  <p>Three forces act on each node at every step.</p>
+
+  <p>
+    A <em>centering force</em> pulls every node weakly toward the origin, preventing the graph
+    from drifting off-screen. A <em>repulsion</em> pushes every pair of nodes apart with magnitude
+    proportional to $1/d^2$, so nearby nodes repel strongly regardless of whether they are
+    connected. A <em>spring force</em> acts only along edges: connected nodes attract each other
+    when their separation exceeds a target length $\ell$ and repel when it falls short, pulling
+    linked pairs toward a consistent spacing.
+  </p>
+
+  <p>
+    At each step, velocity is updated with a damping factor of $0.9$ so the system can settle
+    rather than oscillate indefinitely.
+  </p>
+
+  <h2>Results</h2>
+
+  <p>
+    The figures below show the initial and settled layouts for a 4-node and a 10-node graph.
+    In both cases the nodes start in an uneven layout; the forces settle them into a more
+    readable arrangement centered on the origin.
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="initial_4node.png" alt="Initial 4-node layout" />
+      <img src="final_4node.png"   alt="Settled 4-node layout" />
+    </div>
+    <figcaption>
+      <strong>Figure 1.</strong> Initial (left) and settled (right) layout for a 4-node graph.
+      The nodes begin bunched in one corner and settle into a compact, evenly spaced configuration.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <div class="figure-row">
+      <img src="initial_10node.png" alt="Initial 10-node layout" />
+      <img src="final_10node.png"   alt="Settled 10-node layout" />
+    </div>
+    <figcaption>
+      <strong>Figure 2.</strong> Initial (left) and settled (right) layout for a sparse 10-node graph.
+      The connections are concentrated in one region of the initial layout, leaving several nodes
+      loosely attached. In the settled state the connected nodes pull into a compact cluster, while
+      one isolated node sits apart, drawn only by the centering force with no spring to anchor it.
+    </figcaption>
+  </figure>
+
+  <h2>Implementation</h2>
+
+  <p>
+    The full script is on the linked GitHub. Below is the force calculation and the per-frame
+    update loop.
+  </p>
+
+<pre><code>def calc_force(self, other):
+    force_x, force_y = 0.0, 0.0
+    epsilon = 1e-5
+
+    # centering
+    force_x += (centerx - self.x) * center_force
+    force_y += (centery - self.y) * center_force
+
+    if self.index == other.index:
+        return force_x, force_y
+
+    dx = self.x - other.x
+    dy = self.y - other.y
+    distance = np.hypot(dx, dy) + epsilon
+
+    # repulsion
+    repel_magnitude = repel_force / (distance ** 2)
+    force_x += (dx / distance) * repel_magnitude
+    force_y += (dy / distance) * repel_magnitude
+
+    # spring attraction along edges
+    is_connected = (
+        [self.index, other.index] in connections or
+        [other.index, self.index] in connections
+    )
+    if is_connected:
+        displacement = distance - link_length
+        spring_magnitude = link_force * displacement
+        force_x -= dx * spring_magnitude
+        force_y -= dy * spring_magnitude
+
+    return [force_x, force_y]
+
+
+def update(frame):
+    for node in nodes:
+        fx, fy = 0.0, 0.0
+        for other in nodes:
+            dfx, dfy = node.calc_force(other)
+            fx += dfx
+            fy += dfy
+        node.move([fx, fy])</code></pre>
+
+</main>
+
+<footer>
+  <p>Sebastien Lorentz, hosted on GitHub Pages</p>
+</footer>
+
+</body>
+</html>

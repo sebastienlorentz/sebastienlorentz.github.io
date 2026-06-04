@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cobweb Plot</title>
+  <title>Cellular Potts Model | Sebastien</title>
   <link rel="stylesheet" href="../../assets/css/main.css" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
@@ -20,7 +20,6 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
 </head>
 <body>
 
@@ -29,6 +28,7 @@
     <a class="nav-brand" href="/">Home</a>
     <ul class="nav-links">
       <li><a href="/projects/" class="active">Projects</a></li>
+      <li><a href="/experiments/">Experiments</a></li>
       <li><a href="/about.html">About</a></li>
     </ul>
   </div>
@@ -41,7 +41,7 @@
   <div class="project-header">
     <h1>Cellular Potts Model</h1>
     <p style="color:var(--text-dim); margin-bottom:0;">
-      CPM simulation, built in MATLAB.
+      Cell-sorting simulations on a 2D lattice.
     </p>
     <div class="project-meta">
       <span>Apr 2026</span>
@@ -51,90 +51,257 @@
     <div class="tag-list">
       <span class="tag">Monte Carlo methods</span>
       <span class="tag">MATLAB</span>
-      <span class="tag">visualisation</span>
+      <span class="tag">mathematical biology</span>
     </div>
   </div>
 
   <h2>Overview</h2>
 
   <p>
-    The <a href="https://en.wikipedia.org/wiki/Cellular_Potts_model" target="_blank">Cellular Potts Model</a> 
-    (CPM) is a lattice-based model for simulating the dynamics
-  of interacting cells. Originally developed to study cell sorting, the model assigns
-  each site on an $N \times N$ grid to a cell type, and evolves the system through a
-  sequence of Monte Carlo steps in which proposed site updates are accepted or rejected
-  according to a Boltzmann probability dependent on the change in energy. The energy of
-  the system is governed by a Hamiltonian encoding two competing effects: differential
-  adhesion, which drives cells of the same type to cluster together, and a volume
-  constraint, which penalises deviations from a prescribed target volume. This project
-  investigates the qualitative cell-sorting behaviour produced by the CPM and examines
-  how varying the parameters of the Hamiltonian affects pattern formation.
+    The <a href="https://en.wikipedia.org/wiki/Cellular_Potts_model" target="_blank" rel="noopener">Cellular Potts Model</a>
+    (CPM) is a lattice-based model for simulating the dynamics of interacting cells. Originally
+    developed to study cell sorting, the model assigns each site on an $N \times N$ grid to a
+    cell type and evolves the system through a sequence of Monte Carlo steps in which proposed
+    site updates are accepted or rejected according to a Boltzmann probability dependent on the
+    change in energy. The energy of the system is governed by a Hamiltonian encoding two competing
+    effects: differential adhesion, which drives cells of the same type to cluster together, and a
+    volume constraint, which penalises deviations from a target volume. This project
+    investigates the qualitative cell-sorting behaviour produced by the CPM and examines how
+    varying the parameters of the Hamiltonian affects pattern formation.
   </p>
 
-  <div class="demo-wrap">
-  <div class="demo-label">Interactive — edit and run Python</div>
-  <pre data-executable data-language="python">
-import numpy as np
-import matplotlib.pyplot as plt
+  <h2>The Hamiltonian</h2>
 
-x = np.linspace(0, 2 * np.pi, 500)
-plt.plot(x, np.sin(x))
-plt.xlabel('x')
-plt.ylabel('sin(x)')
-plt.title('Sine wave')
-plt.show()  
-</pre>
-</div>
+  <p>
+    The Hamiltonian $H$ encodes the physical laws governing cell behaviour, with each term
+    representing a distinct biological constraint:
+  </p>
+
+  $$
+  H =
+  \sum_{\text{neighbours}} J\!\left(\sigma_{(i,j)}, \sigma_{(i',j')}\right)
+  \left(1-\delta_{\sigma_{(i,j)},\sigma_{(i',j')}}\right)
+  + \lambda_v \sum_{\sigma=1}^{n} \left( v(\sigma) - V_T(\sigma) \right)^2.
+  $$
+
+  <p>
+    The first term encodes <em>differential adhesion</em>: cells incur an energy cost
+    $J(\sigma, \sigma')$ when sharing a boundary with a cell of a different type, but no cost
+    when adjacent to their own type. The symmetric matrix $J$ determines how strongly each pair
+    of cell types repels; by varying its entries we can drive qualitatively different sorting
+    configurations.
+  </p>
+
+  <p>
+    The second term enforces a <em>volume constraint</em>, penalising any cell type whose total
+    site count $v(\sigma)$ deviates from its target volume $V_T(\sigma)$. The parameter
+    $\lambda_v$ controls the rigidity of this constraint.
+  </p>
 
   <h2>Method</h2>
 
-  <h2>The Hamiltonian</h2>
-$$
-H =
-\sum_{\text{neighbours}} J\!\left(\sigma_{(i,j)}, \sigma_{(i',j')}\right)
-\left(1-\delta_{\sigma_{(i,j)},\sigma_{(i',j')}}\right)
-+ \lambda_v \sum_{\sigma=1}^{n} \left( v(\sigma) - V_T(\sigma) \right)^2 .
-$$
+  <p>
+    The simulation takes place on an $N \times N$ square lattice. Each grid point is assigned a
+    value from $\{0, \ldots, n\}$, where $0$ represents the background medium and $1, \ldots, n$
+    denote cell types. The lattice is initialised with a circular region at its centre containing a
+    random mixture of cell types, surrounded by background. Periodic boundary conditions are used
+    throughout.
+  </p>
+
+  <p>
+    Time is measured in Monte Carlo Steps (MCS). During each MCS, $N^2$ attempted updates are
+    performed. Each update proceeds as follows: a lattice site $(i, j)$ is selected at random,
+    then a random neighbour from its Moore 8-neighbourhood is selected. If the two sites have
+    different cell types, the proposed change (copying the neighbour's type to $(i, j)$)
+    is accepted with probability
+    $$\min\!\left(1,\, e^{-\Delta H / T}\right),$$
+    where $\Delta H$ is the resulting change in the Hamiltonian and $T$ is the Boltzmann
+    temperature, which controls the level of noise in the system.
+  </p>
 
   <h2>Results</h2>
-  
+
+  <h3>Basic cell sorting</h3>
+
+  <p>
+    We first consider the simplest case: two cell types with equal contact energies, using
+    $\lambda_v = T = 1$, $N = 150$, $V_T = (0, 2500, 2500)$, and symmetric adhesion matrix
+    $$J = \begin{pmatrix} 0 & 1 & 1 \\ 1 & 0 & 1 \\ 1 & 1 & 0 \end{pmatrix}.$$
+    The lattice is shown at $t = 0, 10, 100, 500, 2300$ MCS.
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="images/figure1/figure1_0.png"    alt="t=0 MCS" />
+      <img src="images/figure1/figure1_10.png"   alt="t=10 MCS" />
+      <img src="images/figure1/figure1_100.png"  alt="t=100 MCS" />
+      <img src="images/figure1/figure1_500.png"  alt="t=500 MCS" />
+      <img src="images/figure1/figure1_2300.png" alt="t=2300 MCS" />
+    </div>
+    <figcaption>
+      <strong>Figure 1.</strong> $t = 0, 10, 100, 500, 2300$ MCS. Cells preferentially cluster
+      with their own type; by 500 MCS smooth separated regions have formed, and by 2300 MCS the
+      two cell types are fully separated into distinct lobes.
+    </figcaption>
+  </figure>
+
+  <h3>Effect of $\lambda_v$</h3>
+
+  <p>
+    Increasing $\lambda_v$ to 10 raises the energy penalty for every cell flip, making the
+    system far more reluctant to change. The snapshots below ($t = 0, 10, 100, 300$ MCS) show
+    that sorting still occurs but progresses much more slowly, with little visible evolution
+    between MCS 100 and MCS 300.
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="images/figure2/figure2_0.png"   alt="t=0 MCS" />
+      <img src="images/figure2/figure2_10.png"  alt="t=10 MCS" />
+      <img src="images/figure2/figure2_100.png" alt="t=100 MCS" />
+      <img src="images/figure2/figure2_300.png" alt="t=300 MCS" />
+    </div>
+    <figcaption>
+      <strong>Figure 2.</strong> $t = 0, 10, 100, 300$ MCS with $\lambda_v = 10$. The increased
+      volume rigidity greatly slows the sorting dynamics.
+    </figcaption>
+  </figure>
+
+  <h3>Effect of temperature $T$</h3>
+
+  <p>
+    The Boltzmann temperature $T$ controls the amount of random fluctuation in the system. A
+    large $T$ increases the probability of energetically unfavourable moves being accepted. With
+    $T = 10$ the simulation produces noisy, feathered cell boundaries rather than the smooth
+    separated regions seen previously ($t = 0, 10, 100, 250$ MCS).
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="images/figure3/figure3_0.png"   alt="t=0 MCS" />
+      <img src="images/figure3/figure3_10.png"  alt="t=10 MCS" />
+      <img src="images/figure3/figure3_100.png" alt="t=100 MCS" />
+      <img src="images/figure3/figure3_250.png" alt="t=250 MCS" />
+    </div>
+    <figcaption>
+      <strong>Figure 3.</strong> $t = 0, 10, 100, 250$ MCS with $T = 10$. High temperature
+      introduces noise that prevents clean phase separation.
+    </figcaption>
+  </figure>
+
+  <h3>Preferential adhesion</h3>
+
+  <p>
+    By making the adhesion matrix asymmetric we can drive more structured sorting. Setting
+    $$J = \begin{pmatrix} 0 & 1 & 10 \\ 1 & 0 & 1 \\ 10 & 1 & 0 \end{pmatrix}$$
+    means cell type 2 incurs a large energy penalty when in contact with the background, and so
+    is strongly driven to be surrounded by cell type 1. By MCS 100 the type-1 cells have
+    completely enveloped the type-2 cells, and by MCS 950 the configuration is fully sorted
+    ($t = 0, 10, 100, 950$ MCS).
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="images/figure4/figure4_0.png"   alt="t=0 MCS" />
+      <img src="images/figure4/figure4_10.png"  alt="t=10 MCS" />
+      <img src="images/figure4/figure4_100.png" alt="t=100 MCS" />
+      <img src="images/figure4/figure4_950.png" alt="t=950 MCS" />
+    </div>
+    <figcaption>
+      <strong>Figure 4.</strong> $t = 0, 10, 100, 950$ MCS with asymmetric $J$. Type-1 cells
+      engulf type-2 cells, producing a stable encapsulation configuration.
+    </figcaption>
+  </figure>
+
+  <h3>Three cell types</h3>
+
+  <p>
+    Extending to $n = 3$ cell types with a $4 \times 4$ adhesion matrix
+    $$J = \begin{pmatrix} 0 & 1 & 10 & 10 \\ 1 & 0 & 1 & 5 \\ 10 & 1 & 0 & 1 \\ 10 & 5 & 1 & 0 \end{pmatrix}$$
+    and target volumes $V_T = (0, 2500, 2500, 2500)$ produces nested sorting. The entries ensure
+    that type-3 cells have the lowest contact energy with type-2, and type-2 with type-1, so the
+    system evolves into a layered configuration. By MCS 650 the three types are fully nested
+    ($t = 0, 10, 100, 650$ MCS).
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="images/figure5/figure5_0.png"   alt="t=0 MCS" />
+      <img src="images/figure5/figure5_10.png"  alt="t=10 MCS" />
+      <img src="images/figure5/figure5_100.png" alt="t=100 MCS" />
+      <img src="images/figure5/figure5_650.png" alt="t=650 MCS" />
+    </div>
+    <figcaption>
+      <strong>Figure 5.</strong> $t = 0, 10, 100, 650$ MCS with three cell types. The system
+      sorts into a nested configuration: type-3 surrounded by type-2, surrounded by type-1.
+    </figcaption>
+  </figure>
 
   <h2>Implementation</h2>
-  <h3>The entire script can be found on the linked Github. Below is a snippet of the main loop</h3>
-  <p>The cobweb loop:</p>
 
-<pre><code>
-  let x0 = 0.1;
-  let y0 = 0;
-  for (let i = 0; i < n_iters; i++) {
-    let fx = r * x0 * (1 - x0);
-    line(cx(x0), cy(y0), cx(x0), cy(fx));
-    line(cx(x0), cy(fx), cx(fx), cy(fx));
-    y0 = fx;
-    x0 = fx;
-  }
-</code></pre>
+  <p>
+    The simulation is implemented in MATLAB. The two-cell case uses <code>CPM.m</code> and the
+    three-cell case uses <code>CPM_3cell.m</code>; both are available on the linked GitHub. Below
+    is the core update logic: <code>deltaH</code> computes the change in Hamiltonian from a
+    proposed copy attempt, and <code>updateCells</code> applies the Metropolis&ndash;Hastings
+    acceptance step.
+  </p>
 
-<script src="https://unpkg.com/juniper-js/dist/juniper.min.js"></script>
+<pre><code>function dH = deltaH(r, c, new_type)
+    oldType = lattice(r, c);
+    if oldType == new_type, dH = 0; return; end
 
-<script>
-fetch('https://mybinder.org/v2/gh/gaba5/gaba5.github.io/main', {mode: 'no-cors'})
-  .catch(function() {});
-</script>
+    dH_adhesion = 0;
+    for i = 1:size(NEIGHBORS, 1)
+        new_r = mod(r + NEIGHBORS(i,1) - 1, gridWidth) + 1;
+        new_c = mod(c + NEIGHBORS(i,2) - 1, gridWidth) + 1;
+        nType = lattice(new_r, new_c);
+        contact_before = J(oldType+1, nType+1) * (1 - (oldType  == nType));
+        contact_after  = J(new_type+1, nType+1) * (1 - (new_type == nType));
+        dH_adhesion = dH_adhesion + (contact_after - contact_before);
+    end
 
-<script>
-  new Juniper({
-    repo:        'gaba5/gaba5.github.io',
-    branch:      'main',
-    kernelType:  'python3',
-    defaultLang: 'python'
-  });
-</script>
+    dH_volume = 0;
+    if oldType ~= 0
+        vO = volumes(oldType+1); VO = targetVolume(oldType+1);
+        dH_volume = dH_volume + lambdaV * ((vO-1-VO)^2 - (vO-VO)^2);
+    end
+    if new_type ~= 0
+        vN = volumes(new_type+1); VN = targetVolume(new_type+1);
+        dH_volume = dH_volume + lambdaV * ((vN+1-VN)^2 - (vN-VN)^2);
+    end
+
+    dH = dH_adhesion + dH_volume;
+end
+
+function updateCells()
+    r = randi(gridWidth);
+    c = randi(gridWidth);
+    nbr     = getRandomNeighbor(r, c);
+    oldType = lattice(r, c);
+    newType = lattice(nbr(1), nbr(2));
+    if oldType == newType, return; end
+
+    dH = deltaH(r, c, newType);
+    if rand < exp(-dH / T)
+        lattice(r, c)          = newType;
+        volumes(oldType+1)     = volumes(oldType+1) - 1;
+        volumes(newType+1)     = volumes(newType+1) + 1;
+    end
+end</code></pre>
+
+  <h2>References</h2>
+
+  <p>
+    Graner, F. &amp; Glazier, J. A. (1992). Simulation of biological cell sorting using a
+    two-dimensional extended Potts model. <em>Physical Review Letters</em>, 69(13), 2013&ndash;2016.
+    <a href="https://doi.org/10.1103/PhysRevLett.69.2013" target="_blank" rel="noopener">doi:10.1103/PhysRevLett.69.2013</a>
+  </p>
 
 </main>
 
 <footer>
-  <p>Sebastien Lorentz &mdash; hosted on GitHub Pages</p>
+  <p>Sebastien Lorentz, hosted on GitHub Pages</p>
 </footer>
 
 </body>
