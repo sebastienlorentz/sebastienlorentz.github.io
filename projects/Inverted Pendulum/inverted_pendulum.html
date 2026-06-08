@@ -224,12 +224,16 @@ def backward(cache, P, Y):
   </p>
 
   <figure>
-    <video autoplay loop muted playsinline style="width:100%" src="videos/epoch_0.mp4"></video>
+    <video autoplay loop muted playsinline webkit-playsinline style="width:100%">
+      <source src="videos/epoch_0.mp4" type="video/mp4">
+    </video>
     <figcaption>Epoch 0: random weights. The cart moves randomly with no control.</figcaption>
   </figure>
 
   <figure>
-    <video autoplay loop muted playsinline style="width:100%" src="videos/epoch_1000.mp4"></video>
+    <video autoplay loop muted playsinline webkit-playsinline style="width:100%">
+      <source src="videos/epoch_1000.mp4" type="video/mp4">
+    </video>
     <figcaption>Epoch 1000: trained. The network swings the pendulum up and holds it balanced.</figcaption>
   </figure>
 
@@ -269,7 +273,7 @@ def backward(cache, P, Y):
 
   <figure>
     <img src="training_curve.png" alt="Training and validation MSE across epochs"
-         style="max-width:540px; display:block; margin:0 auto;" />
+         style="max-width:540px; width:100%; display:block; margin:0 auto;" />
     <figcaption>
       <strong>Figure 2.</strong> Training and validation MSE across epochs.
     </figcaption>
