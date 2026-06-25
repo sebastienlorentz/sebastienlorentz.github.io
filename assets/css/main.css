@@ -183,6 +183,9 @@ footer p {
   padding:        0.1em 0.4em;
   color:          var(--text-dim);
 }
+/* clickable tag chips (handled by /assets/js/tags.js) */
+.tag, .item-tag { cursor: pointer; transition: color 0.15s, border-color 0.15s; }
+.tag:hover, .item-tag:hover { color: var(--accent); border-color: var(--accent); }
 .item-date {
   font-family: var(--mono);
   font-size:   0.63rem;

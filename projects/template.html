@@ -99,7 +99,7 @@
     <div class="project-meta">
       <span>Month Year</span>
       <span>Language / Tool</span>
-      <span><a href="https://github.com/gaba5/repo" target="_blank" rel="noopener">GitHub &nearr;</a></span>
+      <span><a href="https://github.com/sebastienlorentz/repo" target="_blank" rel="noopener">GitHub &nearr;</a></span>
     </div>
     <div class="tag-list">
       <span class="tag">tag one</span>
@@ -207,7 +207,7 @@ function example() {
 <!-- Binder warm-up: silently starts the container on page load -->
 <script>
   // Open a streaming connection to Binder to trigger container warm-up
-  var binderUrl = 'https://mybinder.org/build/gh/gaba5/gaba5.github.io/main';
+  var binderUrl = 'https://mybinder.org/build/gh/sebastienlorentz/sebastienlorentz.github.io/main';
   var es = new EventSource(binderUrl);
   es.onmessage = function(e) {
     var data = JSON.parse(e.data);
@@ -224,7 +224,7 @@ function example() {
 <!-- Juniper initialisation: must come after the Juniper script in <head> -->
 <script>
   new Juniper({
-    repo:        'gaba5/gaba5.github.io',
+    repo:        'sebastienlorentz/sebastienlorentz.github.io',
     branch:      'main',
     kernelType:  'python3',   /* change to 'octave' for Octave pages */
     defaultLang: 'python'     /* change to 'octave' for Octave pages */

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tags | Sebastien</title>
+  <link rel="stylesheet" href="/assets/css/main.css?v=3" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Home</a>
+    <ul class="nav-links">
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/experiments/">Experiments</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <h1 id="heading">Tags</h1>
+  <p id="subhead" style="color:var(--text-dim); margin-top:0.5rem; margin-bottom:2rem;"></p>
+
+  <div class="project-list" id="results"></div>
+</main>
+
+<footer>
+  <p>Sebastien Lorentz, hosted on GitHub Pages</p>
+</footer>
+
+<script>
+// The two section index pages list every item with its tags, so they are the
+// single source of truth: we fetch them, parse out the cards, and filter.
+const SOURCES = ["/projects/", "/experiments/"];
+
+function esc(s) {
+  return s.replace(/[&<>"']/g, c => (
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]
+  ));
+}
+
+function cardHTML(item) {
+  const tags = item.tags.map(t => `<span class="item-tag">${esc(t)}</span>`).join("\n");
+  return `
+    <a class="project-item" href="${esc(item.href)}">
+      <div>
+        <div class="item-title">${esc(item.title)}</div>
+        <div class="item-desc">${esc(item.desc)}</div>
+        <div class="item-tags">${tags}</div>
+      </div>
+      <div class="item-date">${esc(item.date)}</div>
+    </a>`;
+}
+
+async function loadItems() {
+  const items = [];
+  const seen = new Set();
+  for (const src of SOURCES) {
+    let doc;
+    try {
+      const html = await (await fetch(src)).text();
+      doc = new DOMParser().parseFromString(html, "text/html");
+    } catch (e) {
+      continue;
+    }
+    for (const el of doc.querySelectorAll(".project-list .project-item")) {
+      const href = el.getAttribute("href");
+      if (!href || seen.has(href)) continue;
+      seen.add(href);
+      items.push({
+        href,
+        title: (el.querySelector(".item-title")?.textContent || "").trim(),
+        desc:  (el.querySelector(".item-desc")?.textContent  || "").trim(),
+        date:  (el.querySelector(".item-date")?.textContent  || "").trim(),
+        tags:  [...el.querySelectorAll(".item-tag")].map(t => t.textContent.trim())
+      });
+    }
+  }
+  return items;
+}
+
+function showTagIndex(items) {
+  const counts = new Map();
+  for (const it of items)
+    for (const t of it.tags) counts.set(t, (counts.get(t) || 0) + 1);
+  const tags = [...counts.keys()].sort((a, b) => a.localeCompare(b));
+  document.getElementById("heading").textContent = "Tags";
+  document.getElementById("subhead").textContent =
+    "Browse projects and experiments by tag.";
+  document.getElementById("results").outerHTML =
+    `<div class="tag-list" style="margin-bottom:2rem;">` +
+    tags.map(t => `<span class="tag" data-tag="${esc(t)}">${esc(t)} (${counts.get(t)})</span>`).join("") +
+    `</div>`;
+}
+
+function showMatches(items, tag) {
+  const want = tag.toLowerCase();
+  const matches = items
+    .filter(it => it.tags.some(t => t.toLowerCase() === want))
+    .sort((a, b) => a.title.localeCompare(b.title));
+  document.getElementById("heading").textContent = `Tagged “${tag}”`;
+  document.getElementById("subhead").innerHTML =
+    `${matches.length} ${matches.length === 1 ? "page" : "pages"} · ` +
+    `<a href="/tags.html">all tags</a>`;
+  document.getElementById("results").innerHTML =
+    matches.length ? matches.map(cardHTML).join("\n")
+                   : `<p style="color:var(--text-dim);">No pages with this tag.</p>`;
+}
+
+(async function () {
+  const items = await loadItems();
+  const tag = new URLSearchParams(location.search).get("tag");
+  if (tag) showMatches(items, tag);
+  else showTagIndex(items);
+})();
+</script>
+<script src="/assets/js/tags.js" defer></script>
+
+</body>
+</html>
