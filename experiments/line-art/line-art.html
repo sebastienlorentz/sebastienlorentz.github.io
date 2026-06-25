@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parametric Line Art | Sebastien</title>
+  <link rel="stylesheet" href="../../assets/css/main.css" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath:  [['$', '$']],
+        displayMath: [['$$', '$$']],
+        packages:    {'[+]': ['ams']}
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">Home</a>
+    <ul class="nav-links">
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/experiments/" class="active">Experiments</a></li>
+      <li><a href="/about.html">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+  <a class="back-link" href="/experiments/">&larr; All experiments</a>
+
+  <div class="project-header">
+    <h1>Parametric Line Art</h1>
+    <p style="color:var(--text-dim); margin-bottom:0;">
+      Generative line-art diagrams built from a thousand trig-defined line segments.
+    </p>
+    <div class="project-meta">
+      <span>Jun 2026</span>
+      <span>Python</span>
+      <span><a href="https://github.com/gaba5/gaba5.github.io/tree/main/experiments/line-art" target="_blank" rel="noopener">GitHub &nearr;</a></span>
+    </div>
+    <div class="tag-list">
+      <span class="tag">generative art</span>
+      <span class="tag">Python</span>
+      <span class="tag">visualisation</span>
+    </div>
+  </div>
+
+  <figure>
+    <img src="assets/final.png" alt="High-resolution line-art diagram resembling a flying bird"
+         style="display:block; width:100%; height:auto; max-height:80vh; object-fit:contain; margin:0 auto;" />
+    <figcaption>
+      <strong>Figure 1.</strong> A finished diagram, lineage <code>[98, 215, 117, 371]</code>,
+      rendered from 1500 straight line segments whose overlapping envelopes resemble a flying bird.
+    </figcaption>
+  </figure>
+
+  <h2>Overview</h2>
+
+  <p>
+    This experiment generates abstract figures from short trigonometric equations. Each figure is
+    built from a large number of straight line segments whose endpoints are fixed by a small set of
+    coefficients, so that very simple equations give rise to intricate overlapping forms. The goal
+    is to search the space of these equations for those that produce a recognisable figure, and for
+    each one to recover the single closed-form formula that generates it.
+  </p>
+
+  <p>
+    The two endpoints of the $k$-th segment are given by smooth functions of $k$, so as $k$ runs
+    from $0$ to $N$ the segments fan out and their overlaps form moir&eacute;-like envelopes. For a
+    suitable choice of coefficients these envelopes resolve into a coherent shape, such as the bird
+    in Figure 1, even though every segment is placed by the same fixed set of equations.
+  </p>
+
+  <h2>The equations</h2>
+
+  <p>
+    A single endpoint coordinate is a sum of one sine and one cosine term, each raised to an integer
+    power:
+  </p>
+
+  <p>
+    $$ a_1\,\sin\!\left(c_1\pi k + d_1\pi\right)^{b_1} \;+\; a_2\,\cos\!\left(c_2\pi k + d_2\pi\right)^{b_2} $$
+  </p>
+
+  <p>
+    A segment has two endpoints, $P_1 = (x_1, y_1)$ and $P_2 = (x_2, y_2)$, so four coordinates in
+    all, each with its own sine and cosine term. That makes four coefficient families, stored as
+    $2\times2\times2$ arrays indexed by (coordinate row, sin/cos, endpoint):
+  </p>
+
+  <ul>
+    <li>$a$: amplitudes, drawn uniformly from $[-5, 5]$.</li>
+    <li>$b$: integer powers $0$ to $5$. The power sharpens the trigonometric terms into the
+      cusps and flares characteristic of each figure.</li>
+    <li>$c$: integer frequencies $-6$ to $6$. Restricting them to integers keeps the curves
+      coherent rather than drifting.</li>
+    <li>$d$: phase offsets, drawn uniformly from $[-10, 10]$.</li>
+  </ul>
+
+  <p>
+    For the bird in Figure 1, after the cleaning step described below rounds the coefficients to
+    fractions, the two endpoints are, for $k = 1, 2, \ldots, 1500$:
+  </p>
+
+  <p style="overflow-x:auto;">
+    $$ P_1 = \left( \tfrac{7}{3}\,\sin\!\left(\tfrac{3\pi k}{1500} - \tfrac{19}{26}\pi\right)^{5} - \tfrac{1}{9},\ \ -\tfrac{6}{47}\,\sin\!\left(\tfrac{-\pi k}{1500} + \tfrac{25}{44}\pi\right)^{3} \right) $$
+  </p>
+
+  <p style="overflow-x:auto;">
+    $$ P_2 = \left( \tfrac{11}{18}\,\sin\!\left(\tfrac{-4\pi k}{1500} + \tfrac{4}{9}\pi\right)^{2} + \tfrac{17}{6}\,\cos\!\left(\tfrac{3\pi k}{1500}\right),\ \ -\tfrac{23}{6}\,\sin\!\left(\tfrac{-\pi k}{1500} - \tfrac{3}{17}\pi\right)^{3} - \tfrac{30}{31}\,\cos\!\left(\tfrac{4\pi k}{1500} - \tfrac{1}{4}\pi\right)^{4} \right) $$
+  </p>
+
+  <p>
+    The coefficients begin as floating-point values and are rounded to these fractions by the
+    cleaning step described below. Terms whose frequency is zero are constant in $k$ and collapse to
+    a single number, such as the $-\tfrac{1}{9}$ in $x_1$; terms of negligible amplitude are dropped
+    entirely, which accounts for the differing lengths of the coordinates.
+  </p>
+
+  <h2>Finding a diagram</h2>
+
+  <p>
+    Random coefficients rarely produce a usable figure, so we search for one in four stages.
+  </p>
+
+  <p>
+    The first stage is a <em>rough scan</em>: we evaluate a thousand random seeds, save a
+    low-resolution thumbnail for each, and pick out a small number of promising shapes.
+  </p>
+
+  <p>
+    The second stage <em>refines</em> a chosen diagram by generating variations of it. We hold the
+    powers $b$ and frequencies $c$ fixed, since altering them reshapes the figure entirely, and
+    perturb only the amplitudes $a$ and phases $d$ with Gaussian noise. The perturbation magnitude
+    shrinks at each level by a factor of $0.8$, so early levels explore broadly and later levels
+    refine. We keep the best variation, append its index to the lineage, and repeat, converging on a
+    final figure one index at a time.
+  </p>
+
+  <p>
+    The progression below is one such chain of four refinement steps converging on the bird.
+  </p>
+
+  <figure>
+    <div class="figure-row">
+      <img src="assets/stage0.png" alt="Refinement stage 0" />
+      <img src="assets/stage1.png" alt="Refinement stage 1" />
+      <img src="assets/stage2.png" alt="Refinement stage 2" />
+      <img src="assets/stage3.png" alt="Refinement stage 3" />
+    </div>
+    <figcaption>
+      <strong>Figure 2.</strong> Four refinement steps, left to right. Each is a small, diminishing
+      perturbation of the preceding one, tightening the silhouette toward the final figure.
+    </figcaption>
+  </figure>
+
+  <p>
+    The search is made practical by a reproducibility scheme. A diagram is identified entirely by its
+    <em>lineage path</em>, a list of integers such as <code>[98, 215, 117, 371]</code>: the first is
+    the base seed, and each subsequent index selects a variation. Each perturbation is seeded by the
+    path prefix that produced it, so we can reconstruct any node in the tree from its integers alone,
+    without storing intermediate coefficients or images.
+  </p>
+
+  <p>
+    The third stage <em>cleans</em> the coefficients. We round each floating-point value to a nearby
+    fraction with a bounded denominator (20 for most terms, 50 for high-power terms, where the figure
+    is more sensitive), and collapse any zero-frequency term, which is constant in $k$, into a single
+    rational number. The result is a compact closed-form expression, while the rendered figure is
+    visually unchanged.
+  </p>
+
+  <p>
+    The fourth stage <em>renders</em> the final figure from the cleaned coefficients, producing the
+    high-resolution image, the LaTeX formula, and an animation of the segments drawn in sequence.
+  </p>
+
+  <figure>
+    <img src="assets/diagram_98_215_117_371_anim.gif" alt="Animation of the line segments being drawn one by one"
+         style="display:block; width:100%; height:auto; max-height:80vh; object-fit:contain; margin:0 auto;" />
+    <figcaption>
+      <strong>Figure 3.</strong> The 1500 segments drawn in order of $k$, showing how the envelope
+      accumulates.
+    </figcaption>
+  </figure>
+
+  <h2>Implementation</h2>
+
+  <p>
+    The full scripts are on the linked GitHub. The two functions below are central:
+    <code>coeffs_for_path</code> reconstructs any diagram's coefficients from its lineage path, and
+    <code>calc_endpoints</code> evaluates those coefficients to give the segment endpoints.
+  </p>
+
+<pre><code>def coeffs_for_path(path):
+    # path[0] is the base seed; each later index selects a perturbation
+    np.random.seed(path[0])
+    a = np.random.uniform(-5, 5, (2, 2, 2))
+    b = np.random.randint(0, 6, (2, 2, 2))
+    c = np.random.randint(-6, 7, (2, 2, 2))   # integer frequencies -> coherent curves
+    d = np.random.uniform(-10, 10, (2, 2, 2))
+    for depth in range(1, len(path)):
+        rng   = np.random.default_rng(tuple(path[:depth + 1]))
+        scale = 0.0 if path[depth] == 0 else EPSILON * SHRINK ** (depth - 1)
+        a = a + scale * rng.standard_normal(a.shape)
+        d = d + scale * rng.standard_normal(d.shape)
+        # b (powers) and c (frequencies) held fixed across all refinement
+    return a, b, c, d
+
+
+def calc_endpoints(k, a, b, c, d):
+    k = k / N
+    x1 = (a[0,0,0] * np.sin(c[0,0,0]*pi*k + d[0,0,0]*pi) ** b[0,0,0]
+          + a[0,1,0] * np.cos(c[0,1,0]*pi*k + d[0,1,0]*pi) ** b[0,1,0])
+    y1 = (a[1,0,0] * np.sin(c[1,0,0]*pi*k + d[1,0,0]*pi) ** b[1,0,0]
+          + a[1,1,0] * np.cos(c[1,1,0]*pi*k + d[1,1,0]*pi) ** b[1,1,0])
+    x2 = (a[0,0,1] * np.sin(c[0,0,1]*pi*k + d[0,0,1]*pi) ** b[0,0,1]
+          + a[0,1,1] * np.cos(c[0,1,1]*pi*k + d[0,1,1]*pi) ** b[0,1,1])
+    y2 = (a[1,0,1] * np.sin(c[1,0,1]*pi*k + d[1,0,1]*pi) ** b[1,0,1]
+          + a[1,1,1] * np.cos(c[1,1,1]*pi*k + d[1,1,1]*pi) ** b[1,1,1])
+    return x1, y1, x2, y2</code></pre>
+
+  <p>
+    The cleaning step iterates over every term, rounding its amplitude and phase to the nearest
+    bounded-denominator fraction and collapsing the zero-frequency terms:
+  </p>
+
+<pre><code>def frac(x, cap):
+    return Fraction(float(x)).limit_denominator(cap)
+
+for r in (0, 1):
+    for ti, fn in ((0, np.sin), (1, np.cos)):
+        for L in (0, 1):
+            freq = int(c[r,ti,L]); pw = int(b[r,ti,L])
+            cap = MAX_DEN_HIGH_POWER if pw >= HIGH_POWER else MAX_DEN
+            if freq == 0:
+                # k-independent term -> collapse to a single constant fraction (power 0)
+                const = a[r,ti,L] * fn(d[r,ti,L]*pi) ** pw
+                a2[r,ti,L] = float(frac(const, cap)); b2[r,ti,L] = 0
+                c2[r,ti,L] = 0; d2[r,ti,L] = 0.0
+            else:
+                phase = (d[r,ti,L] + 1) % 2 - 1        # reduce phase mod 2 into (-1, 1]
+                a2[r,ti,L] = float(frac(a[r,ti,L], cap))
+                d2[r,ti,L] = float(frac(phase, cap))
+</code></pre>
+
+</main>
+
+<footer>
+  <p>Sebastien Lorentz, hosted on GitHub Pages</p>
+</footer>
+
+</body>
+</html>
